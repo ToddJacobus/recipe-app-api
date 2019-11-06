@@ -31,7 +31,7 @@ class ModelTests(TestCase):
             # be raised)
             # In the case below, test whether or not the email field as None
             # will raise a ValueError, which it should.
-            user = get_user_model().objects.create_user(None, "sectret123")
+            get_user_model().objects.create_user(None, "sectret123")
 
     def test_create_new_superuser(self):
         """Can we create a new superuser?"""
@@ -41,4 +41,5 @@ class ModelTests(TestCase):
         )
         # is_superuser attribute comes from PermissionsMixin
         self.assertTrue(user.is_superuser)
-        self.assertTrue(user.is_staff) # attribute of user from model
+        # attribute of user from model
+        self.assertTrue(user.is_staff)
