@@ -21,13 +21,13 @@ class AuthTokenSerializer(serializers.Serializer):
     """Serializer for the user authentication object"""
     email = serializers.CharField()
     password = serializers.CharField(
-        style={'input_type':'password'},
+        style={'input_type': 'password'},
         trim_whitespace=False
     )
 
     def validate(self, attrs):
         """Validate and authenticate the user"""
-        # The attrs param gets sent in automatically as part of the 
+        # The attrs param gets sent in automatically as part of the
         # serializer subclass.  This param is a dictionary that includes
         # information about the user.
         email = attrs.get('email')
@@ -48,4 +48,3 @@ class AuthTokenSerializer(serializers.Serializer):
         # Pass back authenticated/unauthenticated user information
         attrs['user'] = user
         return attrs
-
