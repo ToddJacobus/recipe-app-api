@@ -25,4 +25,6 @@ class UserAdmin(BaseUserAdmin):
     )
 
 
+# update the models in the admin panel
 admin.site.register(models.User, UserAdmin)
+admin.site.register(models.Tag)
