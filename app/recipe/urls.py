@@ -8,6 +8,7 @@ router = DefaultRouter()
 # register the view with a name
 router.register('tags', views.TagViewSet)
 router.register('ingredients', views.IngredientViewSet)
+router.register('recipes', views.RecipeViewSet)
 
 # assign an app_name so the 'reverse' function can find it.
 app_name = 'recipe'
