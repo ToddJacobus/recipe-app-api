@@ -45,3 +45,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Retrive the recipes for the authenticated user"""
         return self.queryset.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        """return appropriate serializer class"""
+        # Add a conditional so we can return either the detail or
+        # regular serializer class, based on what request is provided.
+        if self.action == 'retrieve':
+            # I'm not sure what exactly 'retrieve' is but I assume it
+            # is a keyword that sort of translates to a GET request?
+            return serializers.RecipeDetailSerializer
+
+        return self.serializer_class
