@@ -160,3 +160,54 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(ingredients.count(), 2)
         self.assertIn(ingredient1, ingredients)
         self.assertIn(ingredient2, ingredients)
+
+    def test_partial_update_recipe(self):
+        """test updating a recipe with PATCH method"""
+        # NOTE: update functionality is available out of the box with
+        #       django rest framework. Hence, you shouldn't really need
+        #       to write tests for it (the Django devs should do that),
+        #       but this is here as an illustrative example.
+        recipe = sample_recipe(user=self.user)
+        recipe.tags.add(sample_tag(user=self.user))
+        new_tag = sample_tag(user=self.user, name='Curry')
+
+        payload = {'title': 'Chicken Tikka', 'tags': [new_tag.id]}
+        # our helper function for returning the detail recipe url
+        url = detail_url(recipe.id)
+        # call PATCH method to client
+        self.client.patch(url, payload)
+
+        # refresh the model object with new data
+        recipe.refresh_from_db()
+
+        self.assertEqual(recipe.title, payload['title'])
+        tags = recipe.tags.all()
+        self.assertEqual(len(tags), 1)
+        self.assertIn(new_tag, tags)
+
+    def test_full_update_recipe(self):
+        """test full update of recipe"""
+        # NOTE: update functionality is available out of the box with
+        #       django rest framework. Hence, you shouldn't really need
+        #       to write tests for it (the Django devs should do that),
+        #       but this is here as an illustrative example.
+        recipe = sample_recipe(user=self.user)
+        recipe.tags.add(sample_tag(user=self.user))
+        payload = {
+            'title': 'Spagetti Carbonara',
+            'time_minutes': 20,
+            'price': 5.00
+        }
+        url = detail_url(recipe.id)
+        self.client.put(url, payload)
+
+        # refresh our recipe model object
+        recipe.refresh_from_db()
+
+        self.assertEqual(recipe.title, payload['title'])
+        self.assertEqual(recipe.time_minutes, payload['time_minutes'])
+        self.assertEqual(recipe.price, payload['price'])
+        tags = recipe.tags.all()
+        # assert that the recipe contains no tags, since we're using
+        # PUT method, and not providing new tags, there should be none.
+        self.assertEqual(len(tags), 0)
